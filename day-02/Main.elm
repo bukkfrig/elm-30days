@@ -27,60 +27,80 @@ type Msg
 isParenthesis : Char -> Bool
 isParenthesis c =
     c == '(' || c == ')'
-    
+
 
 charToParenthesis : Char -> Parenthesis
-charToParenthesis c = 
-    if c == '(' then 
+charToParenthesis c =
+    if c == '(' then
         Left
+
     else
         Right
-        
-stringToListOfParenthsis :  String -> List Parenthesis
+
+
+stringToListOfParenthsis : String -> List Parenthesis
 stringToListOfParenthsis str =
-    List.map charToParenthesis (String.toList ( onlyParenthesis str))
+    List.map charToParenthesis (String.toList (onlyParenthesis str))
+
 
 onlyParenthesis : String -> String
 onlyParenthesis str =
     String.filter isParenthesis str
 
-checkParenthesis : Parenthesis -> Maybe(Int) -> Maybe(Int)
-checkParenthesis p count = 
-    case p of 
-        Left -> Maybe.map  ((+) 1) count
-        Right -> 
+
+checkParenthesis : Parenthesis -> Maybe Int -> Maybe Int
+checkParenthesis p count =
+    case p of
+        Left ->
+            Maybe.map ((+) 1) count
+
+        Right ->
             case count of
-               Nothing -> Nothing
-               Just v ->
-                   if v == 0 then
-                       Nothing
-                   else 
-                       Just(v-1)
-                       
-isValid : Maybe(Int) -> Bool
-isValid  count = 
-    case count of 
-        Nothing -> False
-        Just v -> v == 0
-        
-computeValid : List Parenthesis -> Maybe(Int) 
-computeValid p = 
-    List.foldl checkParenthesis (Just(0)) p
+                Nothing ->
+                    Nothing
+
+                Just v ->
+                    if v == 0 then
+                        Nothing
+
+                    else
+                        Just (v - 1)
+
+
+isValid : Maybe Int -> Bool
+isValid count =
+    case count of
+        Nothing ->
+            False
+
+        Just v ->
+            v == 0
+
+
+computeValid : List Parenthesis -> Maybe Int
+computeValid p =
+    List.foldl checkParenthesis (Just 0) p
+
 
 boolToString : Bool -> String
-boolToString b = 
-    case b of 
-        True -> "Valid"
-        False -> "Invalid"
-        
+boolToString b =
+    case b of
+        True ->
+            "Valid"
+
+        False ->
+            "Invalid"
+
+
 wholeCheck : String -> String
-wholeCheck str = 
+wholeCheck str =
     str
-    |> stringToListOfParenthsis
-    |> computeValid
-    |> isValid
-    |> boolToString
-    
+        |> stringToListOfParenthsis
+        |> computeValid
+        |> isValid
+        |> boolToString
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
